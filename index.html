@@ -16,52 +16,31 @@
     </nav>
   </header>
 
-  <div class="filters">
-  <input type="text" id="search" placeholder="Hledat hráče..." oninput="aplikujFiltry()">
-
-  <select id="filtrTym" onchange="aplikujFiltry()">
-    <option value="">Tým</option>
-  </select>
-
-  <select id="filtrPozice" onchange="aplikujFiltry()">
-    <option value="">Pozice</option>
-  </select>
-
-  <select id="filtrDrzeni" onchange="aplikujFiltry()">
-    <option value="">Držení hole</option>
-    <option value="L">Levá</option>
-    <option value="P">Pravá</option>
-  </select>
-
-  <select id="filtrNarodnost" onchange="aplikujFiltry()">
-    <option value="">Národnost</option>
-  </select>
-
-  <select id="filtrSmlouva" onchange="aplikujFiltry()">
-    <option value="">Smlouva</option>
-    <option value="konci">Končí po sezóně (-)</option>
-    <option value="plati">Platí dál</option>
-  </select>
-
-  <select id="razeni" onchange="aplikujFiltry()">
-    <option value="">Řadit podle...</option>
-    <option value="prijmeni_az">Příjmení (A–Z)</option>
-    <option value="prijmeni_za">Příjmení (Z–A)</option>
-    <option value="vek_asc">Věk (mladší → starší)</option>
-    <option value="vek_desc">Věk (starší → mladší)</option>
-    <option value="tym_az">Tým (A–Z)</option>
-    <option value="tym_za">Tým (Z–A)</option>
-    <option value="pozice_az">Pozice (A–Z)</option>
-    <option value="pozice_za">Pozice (Z–A)</option>
-    <option value="narodnost_az">Národnost (A–Z)</option>
-    <option value="narodnost_za">Národnost (Z–A)</option>
-    <option value="smlouva_asc">Smlouva (nejkratší → nejdelší)</option>
-    <option value="smlouva_desc">Smlouva (nejdelší → nejkratší)</option>
+  <div class="filtry">
+  <input type="text" id="vyhledavani" placeholder="Hledat hráče...">
+  <select id="filtrTymu"></select>
+  <select id="filtrPozice"></select>
+  <select id="filtrDrzeni"></select>
+  <select id="filtrNarodnost"></select>
+  <select id="filtrSmlouva"></select>
+  <select id="razeni">
+  <option value="">Řadit podle...</option>
+  <option value="prijmeni_az">Příjmení (A–Z)</option>
+  <option value="prijmeni_za">Příjmení (Z–A)</option>
+  <option value="vek_asc">Věk (mladší → starší)</option>
+  <option value="vek_desc">Věk (starší → mladší)</option>
+  <option value="tym_az">Tým (A–Z)</option>
+  <option value="tym_za">Tým (Z–A)</option>
+  <option value="pozice_az">Pozice (A–Z)</option>
+  <option value="pozice_za">Pozice (Z–A)</option>
+  <option value="narodnost_az">Národnost (A–Z)</option>
+  <option value="narodnost_za">Národnost (Z–A)</option>
+  <option value="smlouva_asc">Smlouva (nejkratší → nejdelší)</option>
+  <option value="smlouva_desc">Smlouva (nejdelší → nejkratší)</option>
   </select>
 </div>
-
-
-  <main id="hraci">Načítám hráče...</main>
+  
+<main id="hraci">Načítám hráče...</main>
 
   <footer>
     <p>© 2026 Czech Players Database | Vytvořeno ve VS Code</p>
