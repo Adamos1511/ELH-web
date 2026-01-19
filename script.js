@@ -11,7 +11,7 @@ const kluby = [
   { nazev: "HC Olomouc", zkratka: "OLO" },
   { nazev: "BK Mladá Boleslav", zkratka: "MBL" },
   { nazev: "HC Energie Karlovy Vary", zkratka: "KVA" },
-  { nazev: "HC Motor České Budějovice", zkratka: "CBU" },
+  { nazev: "Banes Motor České Budějovice", zkratka: "CBU" },
   { nazev: "HC Litvínov", zkratka: "LIT" },
   { nazev: "Bílí Tygři Liberec", zkratka: "LIB" },
   { nazev: "Rytíři Kladno", zkratka: "KLA" }
@@ -28,7 +28,7 @@ const zkratkyTymu = {
   "HC Olomouc": "OLO",
   "BK Mladá Boleslav": "MBL",
   "HC Energie Karlovy Vary": "KVA",
-  "HC Motor České Budějovice": "CBU",
+  "Banes Motor České Budějovice": "CBU",
   "HC Litvínov": "LIT",
   "Bílí Tygři Liberec": "LIB",
   "Rytíři Kladno": "KLA"
@@ -84,7 +84,7 @@ async function nactiData() {
 }
 let dataKluby = [];
 
-Papa.parse("https://raw.githubusercontent.com/Adamos1511/ELH-web/main/kluby.csv", {
+Papa.parse("https://raw.githubusercontent.com/Adamos1511/ELH_web/refs/heads/main/kluby.csv", {
   download: true,
   header: true,
   complete: function(results) {
@@ -423,7 +423,7 @@ function otevriKlub(zkratka) {
           <p><b>2022/23 Playoff:</b> ${klub["2022/23 PLAYOFF"] || "-"}</p>
           <p><b>2021/22 ZČ:</b> ${klub["2021/22 ZČ"] || "-"}</p>
           <p><b>2021/22 Playoff:</b> ${klub["2021/22 PLAYOFF"] || "-"}</p>
-          <p><b>2020/21 ZČ:</b> ${klub["2020/21 Z"] || "-"}</p>
+          <p><b>2020/21 ZČ:</b> ${klub["2020/21 ZČ"] || "-"}</p>
           <p><b>2020/21 Playoff:</b> ${klub["2020/21 PLAYOFF"] || "-"}</p>
         </div>
 
