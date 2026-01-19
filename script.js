@@ -1,5 +1,21 @@
 let hraciData = [];
-
+/* === PŘEHLED KLUBŮ === */
+const kluby = [
+  { nazev: "HC Dynamo Pardubice", zkratka: "PCE" },
+  { nazev: "HC Sparta Praha", zkratka: "SPA" },
+  { nazev: "HC Oceláři Třinec", zkratka: "TRI" },
+  { nazev: "HC Kometa Brno", zkratka: "KOM" },
+  { nazev: "HC Škoda Plzeň", zkratka: "PLZ" },
+  { nazev: "Mountfield HK", zkratka: "MHK" },
+  { nazev: "HC Vítkovice Ridera", zkratka: "VIT" },
+  { nazev: "HC Olomouc", zkratka: "OLO" },
+  { nazev: "BK Mladá Boleslav", zkratka: "MBL" },
+  { nazev: "HC Energie Karlovy Vary", zkratka: "KVA" },
+  { nazev: "HC Motor České Budějovice", zkratka: "CBU" },
+  { nazev: "HC Litvínov", zkratka: "LIT" },
+  { nazev: "Bílí Tygři Liberec", zkratka: "LIB" },
+  { nazev: "Rytíři Kladno", zkratka: "KLA" }
+];
 // --- MAPA ZKRATEK TÝMŮ ELH ---
 const zkratkyTymu = {
   "HC Dynamo Pardubice": "PCE",
@@ -202,6 +218,41 @@ function filtruj() {
     (`${h.jmeno} ${h.prijmeni}`.toLowerCase().includes(hledani))
   );
 
+
+
+/* === PO KLIKNUTÍ NA KLUB === */
+function otevriKlub(zkratka) {
+  const klub = kluby.find(k => k.zkratka === zkratka);
+  const hraciTymu = hraciData.filter(h => h.tym.includes(klub.nazev));
+
+  let okno = window.open("", "_blank");
+  okno.document.write(`
+    <html>
+      <head>
+        <title>${klub.nazev} - Soupiska</title>
+        <link rel="stylesheet" href="style.css">
+      </head>
+      <body style="padding:20px;">
+        <h1>${klub.nazev}</h1>
+        <img src="https://raw.githubusercontent.com/Adamos1511/ELH-web/main/loga_tymu/${zkratka}.png" style="height:100px;"><br><br>
+        <h2>Soupiska týmu</h2>
+        <div class="hraci-grid">
+          ${hraciTymu.map(h => `
+            <div class="hrac-karta">
+              ${h.foto ? `<img src="${h.foto}" style="width:100%;border-radius:8px;">` : ""}
+              <h3>${h.jmeno} ${h.prijmeni}</h3>
+              <p><b>Pozice:</b> ${h.pozice}</p>
+              <p><b>Věk:</b> ${h.vek}</p>
+              <p><b>Národnost:</b> ${h.narodnost}</p>
+              <p><b>Smlouva:</b> ${h.smlouva}</p>
+            </div>
+          `).join("")}
+        </div>
+      </body>
+    </html>
+  `);
+}
+
   if (razeni) {
   filtrovani.sort((a, b) => {
     switch (razeni) {
@@ -244,7 +295,33 @@ function filtruj() {
 
   zobrazHrace(filtrovani);
 }
+/* === FUNKCE PRO ZOBRAZENÍ KLUBŮ === */
 
+
+// Po kliknutí na "Kluby" v menu
+document.addEventListener("DOMContentLoaded", () => {
+  const odkazKluby = document.getElementById("odkazKluby");
+  if (odkazKluby) {
+    odkazKluby.addEventListener("click", (e) => {
+      e.preventDefault();
+      zobrazKluby();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+});
+
+function zobrazKluby() {
+  const container = document.getElementById("seznam-klubu");
+  if (!container) return;
+  container.innerHTML = kluby.map(k => `
+    <div class="klub-karta" onclick="otevriKlub('${k.zkratka}')">
+      <img src="https://raw.githubusercontent.com/Adamos1511/ELH-web/main/loga_tymu/${k.zkratka}.png" alt="${k.nazev}">
+      <h3>${k.nazev}</h3>
+    </div>
+  `).join("");
+
+  document.getElementById("kluby").style.display = "block";
+}
 
 
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Přehled klubů ELH</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <style>
+    body {
+      background-color: #001147;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h2 {
+      color: white;
+      margin-top: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="kluby">
+    <h2>📊 Přehled klubů ELH</h2>
+    <div id="seznam-klubu" class="kluby-grid"></div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof zobrazKluby === "function") {
+        zobrazKluby();
+      } else {
+        console.error("⚠️ Funkce zobrazKluby() není definována – zkontroluj script.js");
+      }
+    });
+  </script>
+</body>
+</html>

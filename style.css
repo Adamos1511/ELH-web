@@ -325,3 +325,63 @@ footer {
   width: 20px;
   height: 20px;
 }
+#kluby {
+  color: white;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.kluby-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 25px;
+  justify-items: center;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.klub-karta {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 15px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  width: 140px;
+}
+
+.klub-karta:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(247, 244, 244, 0.15);
+}
+
+.klub-karta img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.klub-karta h3 {
+  font-size: 14px;
+  margin: 0;
+  color: #0b1e61;
+}
+.hraci-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.hrac-karta {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.hrac-karta:hover {
+  transform: scale(1.04);
+}
