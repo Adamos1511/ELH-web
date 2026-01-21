@@ -1,4 +1,4 @@
-﻿Foto;Jméno;Příjmení;Smlouva;Pozice;Tým;Věk;Držení hole;Národnost;Výška (cm);Váha (kg);Zápasy;PPP;Body;Góly;Asistence;Ø TOI;+/-;TM;HITY;BLOKY;ÚSP. Vhazování
+﻿ ;Jméno;Příjmení;Smlouva;Pozice;Tým;Věk;Držení hole;Národnost;Výška (cm);Váha (kg);Zápasy;PPP;Body;Góly;Asistence;Ø TOI;+/-;TM;HITY;BLOKY;ÚSP. Vhazování
 ;Tomáš;Cibulka;26/27+1;O;CBU;0;L;CZE;;;;;;;;;;;;;
 ;Milan;Doudera;-;O;CBU;0;L;CZE;;;;;;;;;;;;;
 ;Ondřej;Kachyňa;-;O;CBU;0;L;CZE;;;;;;;;;;;;;
@@ -208,7 +208,6 @@ https://raw.githubusercontent.com/Adamos1511/ELH-web/main/foto_hrac/Olesen.png?v
 ;Trevor;Cosgrove;-;O;OLO;0;L;USA;;;;;;;;;;;;;
 ;Jiří;Ondrušek;-;O;OLO;0;L;CZE;;;;;;;;;;;;;
 ;Rayen;Petrovický;-;O;OLO;0;L;SVK;;;;;;;;;;;;;
-;Michal;Hrádek;26/27;O;OLO;0;P;;;;;;;;;;;;;;
 ;Aleš;Rašner;-;O;OLO;0;L;CZE;;;;;;;;;;;;;
 ;Dalibor;Řezníček;-;O;OLO;0;L;CZE;;;;;;;;;;;;;
 ;Adam;Rutar;27/28;O;OLO;0;P;CZE;;;;;;;;;;;;;
@@ -234,6 +233,7 @@ https://raw.githubusercontent.com/Adamos1511/ELH-web/main/foto_hrac/Olesen.png?v
 ;Tomáš;Dvořák;28/29;O;PCE;0;L;CZE;;;;;;;;;;;;;
 ;Daniel;Gazda;-;O;PCE;0;P;CZE;;;;;;;;;;;;;
 ;Libor;Hájek;27/28;O;PCE;0;L;CZE;;;;;;;;;;;;;
+;Michal;Hrádek;26/27;O;PCE;0;P;CZE;;;;;;;;;;;;;
 ;Jan;Košťálek;26/27;O;PCE;0;P;CZE;;;;;;;;;;;;;
 ;John;Ludvig;27/28;O;PCE;0;L;CAN;;;;;;;;;;;;;
 ;Ondřej;Mikliš;-;O;PCE;0;L;CZE;;;;;;;;;;;;;
