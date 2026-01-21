@@ -131,27 +131,201 @@ function zobrazHrace(data) {
 
 // --- DETAIL HRÁČE ---
 function zobrazDetail(jmeno, prijmeni, tym, pozice, vek, smlouva, drzeni, narodnost, foto) {
-  const modal = document.createElement("div");
-  modal.className = "modal";
-  modal.innerHTML = `
-    <div class="modal-content">
-      <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-      ${foto ? `<img src="${foto}" alt="${jmeno} ${prijmeni}" class="fotoDetail">` : ""}
-      <h2>${jmeno} ${prijmeni}</h2>
-      <p><b>Tým:</b> ${zkratkyTymu[tym] || tym} ${logoTymu(tym)} ${tym}</p>
-      <p><b>Pozice:</b> ${pozice}</p>
-      <p><b>Věk:</b> ${vek}</p>
-      <p><b>Smlouva:</b> ${smlouva}</p>
-      <p><b>Držení hole:</b> ${drzeni}</p>
-      <p><b>Národnost:</b> ${narodnost}</p>
-    </div>
-  `;
-  document.body.appendChild(modal);
+  const csvUrl = "https://raw.githubusercontent.com/Adamos1511/ELH-web/main/hraci_detail.csv";
+  const logoUrl = `https://raw.githubusercontent.com/Adamos1511/ELH-web/main/loga_tymu/${tym}.png`;
 
-  modal.addEventListener("click", e => {
-    if (e.target === modal) modal.remove();
-  });
+  const zkratkyTymu = {
+    CBU: "Banes Motor České Budějovice",
+    PLZ: "HC Škoda Plzeň",
+    SPA: "HC Sparta Praha",
+    TRI: "HC Oceláři Třinec",
+    KOM: "HC Kometa Brno",
+    MBL: "BK Mladá Boleslav",
+    LIT: "HC Verva Litvínov",
+    KVA: "HC Energie Karlovy Vary",
+    OLO: "HC Olomouc",
+    LIB: "Bílí Tygři Liberec",
+    HRA: "Mountfield HK",
+    PCE: "HC Dynamo Pardubice",
+    KLA: "Rytíři Kladno"
+  };
+
+  const plnyNazev = zkratkyTymu[tym] || tym;
+
+  // otevře novou kartu
+  const okno = window.open("", "_blank");
+  okno.document.write(`
+    <html lang="cs">
+      <head>
+        <meta charset="UTF-8">
+        <title>${jmeno} ${prijmeni}</title>
+        <style>
+          body {
+  background: linear-gradient(to bottom, #001147, #002b80);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  margin: 0;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+.profil {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 60px;                   /* mezera mezi fotkou a infem */
+  flex-wrap: wrap;
+}
+
+
+          .foto-hrace {
+  width: 500px;                 /* ✅ větší fotka */
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 0 35px rgba(0,0,0,0.6);
+  margin-bottom: 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.foto-hrace:hover {
+  transform: scale(1.05);       /* efekt při najetí myší */
+  box-shadow: 0 0 45px rgba(255,255,255,0.4);
+}
+
+
+          .info-karta {
+  display: inline-block;
+  background: rgba(255,255,255,0.08);
+  padding: 15px 25px;           /* menší vnitřní mezery */
+  border-radius: 12px;
+  text-align: left;
+  min-width: 280px;             /* menší šířka boxu */
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  font-size: 15px;
+}
+
+
+          .info-karta p {
+            margin: 8px 0;
+            font-size: 17px;
+          }
+
+          .tym-logo {
+            height: 28px;
+            vertical-align: middle;
+            margin-left: 8px;
+          }
+
+          h2 {
+            margin-top: 60px;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+
+          .stat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 25px;
+          }
+
+          .stat {
+            width: 300px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+          }
+
+          .stat span:first-child {
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+        </style>
+      </head>
+      <body>
+        <img src="${foto}" alt="Foto ${jmeno} ${prijmeni}" class="foto-hrace" onerror="this.style.display='none'">
+
+        <div class="info-karta" id="info-karta">
+          <p><b>Jméno:</b> ${jmeno} ${prijmeni}</p>
+          <p><b>Tým:</b> ${plnyNazev}
+            <img src="${logoUrl}" alt="Logo ${plnyNazev}" class="tym-logo" onerror="this.style.display='none'">
+          </p>
+          <p><b>Pozice:</b> ${pozice}</p>
+          <p><b>Věk:</b> ${vek}</p>
+          <p><b>Držení hole:</b> ${drzeni}</p>
+          <p><b>Národnost:</b> ${narodnost}</p>
+          <p><b>Smlouva:</b> ${smlouva}</p>
+        </div>
+
+        <h2>Statistiky hráče</h2>
+        <div id="statistiky">Načítám data...</div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+        <script>
+          Papa.parse("${csvUrl}", {
+            download: true,
+            header: true,
+            complete: function (results) {
+              const data = results.data.filter(r =>
+                r["Jméno"] === "${jmeno}" && r["Příjmení"] === "${prijmeni}"
+              );
+
+              if (data.length === 0) {
+                document.getElementById("statistiky").innerHTML = "<p>Statistiky nenalezeny.</p>";
+                return;
+              }
+
+              const hrac = data[0];
+              const infoKarta = document.getElementById("info-karta");
+
+              // 🔹 Doplň výšku a váhu z CSV
+              const vyska = hrac["Výška (cm)"] || "-";
+              const vaha = hrac["Váha (kg)"] || "-";
+
+              // 🔹 Aktualizuj obsah info karty o tyto parametry
+              infoKarta.innerHTML = \`
+                <p><b>Jméno:</b> ${jmeno} ${prijmeni}</p>
+                <p><b>Tým:</b> ${plnyNazev}
+                  <img src="${logoUrl}" alt="Logo ${plnyNazev}" class="tym-logo" onerror="this.style.display='none'">
+                </p>
+                <p><b>Pozice:</b> ${pozice}</p>
+                <p><b>Věk:</b> ${vek}</p>
+                <p><b>Výška:</b> \${vyska} cm</p>
+                <p><b>Váha:</b> \${vaha} kg</p>
+                <p><b>Držení hole:</b> ${drzeni}</p>
+                <p><b>Národnost:</b> ${narodnost}</p>
+                <p><b>Smlouva:</b> ${smlouva}</p>
+              \`;
+
+              const statDiv = document.getElementById("statistiky");
+              statDiv.classList.add("stat-box");
+
+              const hlavicky = [
+                "Zápasy","PPP","Body","Góly","Asistence",
+                "Ø TOI","+/-","TM","HITY","BLOKY","ÚSP. Vhazování"
+              ];
+
+              statDiv.innerHTML = hlavicky.map(k => 
+                \`<div class="stat"><span>\${k}</span><span>\${hrac[k] || "-"}</span></div>\`
+              ).join("");
+            }
+          });
+        </script>
+      </body>
+    </html>
+  `);
+}
+
+
+
 
 
 // --- FILTRY ---
@@ -444,6 +618,165 @@ function otevriKlub(zkratka) {
     </html>
   `);
 }
+function zobrazDetailHrace(h) {
+  const csvUrl = "https://raw.githubusercontent.com/Adamos1511/ELH-web/main/hraci_detail.csv";
+
+  // odstraníme diakritiku z příjmení kvůli názvům fotek
+  const prijmeniBezDiakritiky = h.prijmeni
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(" ", "_");
+
+  // fotka hráče
+  const fotoUrl = `https://raw.githubusercontent.com/Adamos1511/ELH-web/main/foto_hrac/${prijmeniBezDiakritiky}.png`;
+
+  // mapa zkratek týmů -> plné názvy
+  const nazvyTymu = {
+    CBU: "Banes Motor České Budějovice",
+    PLZ: "HC Škoda Plzeň",
+    SPA: "HC Sparta Praha",
+    TRI: "HC Oceláři Třinec",
+    KOM: "HC Kometa Brno",
+    MBL: "BK Mladá Boleslav",
+    LIT: "HC Verva Litvínov",
+    KVA: "HC Energie Karlovy Vary",
+    OLO: "HC Olomouc",
+    LIB: "Bílí Tygři Liberec",
+    HRA: "Mountfield HK",
+    PCE: "HC Dynamo Pardubice",
+    KLA: "Rytíři Kladno"
+  };
+
+  const plnyNazev = nazvyTymu[h.tym] || h.tym;
+  const logoUrl = `https://raw.githubusercontent.com/Adamos1511/ELH-web/main/loga_tymu/${h.tym}.png`;
+
+  // otevře novou kartu
+  const okno = window.open("", "_blank");
+  okno.document.write(`
+    <html lang="cs">
+      <head>
+        <meta charset="UTF-8">
+        <title>${h.jmeno} ${h.prijmeni}</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+          body {
+            background: linear-gradient(to bottom, #001147, #002b80);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            padding: 40px;
+            text-align: center;
+          }
+          .hrac-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
+          }
+          .hrac-header img {
+            width: 180px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+          }
+          .info {
+            background: rgba(255,255,255,0.08);
+            padding: 20px 35px;
+            border-radius: 12px;
+            display: inline-block;
+            text-align: left;
+            margin-top: 20px;
+          }
+          .info p {
+            margin: 6px 0;
+            font-size: 16px;
+          }
+          table {
+            width: 90%;
+            margin: 40px auto 0 auto;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+          }
+          th, td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+          }
+          th {
+            background: rgba(255,255,255,0.15);
+            text-transform: uppercase;
+          }
+          td {
+            font-size: 15px;
+          }
+          .tym-logo {
+            height: 22px;
+            vertical-align: middle;
+            margin-left: 8px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="hrac-header">
+          <img src="${fotoUrl}" alt="Foto ${h.jmeno} ${h.prijmeni}" onerror="this.style.display='none'">
+        </div>
+
+        <div class="info">
+          <p><b>Jméno:</b> ${h.jmeno} ${h.prijmeni}</p>
+          <p><b>Tým:</b> 
+            ${plnyNazev}
+            <img src="${logoUrl}" alt="Logo ${plnyNazev}" class="tym-logo" onerror="this.style.display='none'">
+          </p>
+          <p><b>Pozice:</b> ${h.pozice}</p>
+          <p><b>Věk:</b> ${h.vek}</p>
+          <p><b>Výška:</b> ${h["Výška (cm)"] || "-"} cm</p>
+          <p><b>Váha:</b> ${h["Váha (kg)"] || "-"} kg</p>
+          <p><b>Držení hole:</b> ${h["Držení hole"] || "-"}</p>
+          <p><b>Národnost:</b> ${h.narodnost}</p>
+          <p><b>Smlouva:</b> ${h.smlouva}</p>
+        </div>
+
+        <h2>Statistiky hráče</h2>
+        <div id="statistiky">Načítám data...</div>
+      </body>
+    </html>
+  `);
+
+  // načti statistiky z CSV
+  Papa.parse(csvUrl, {
+    download: true,
+    header: true,
+    complete: function (results) {
+      const data = results.data.filter(r =>
+        r["Jméno"] === h.jmeno && r["Příjmení"] === h.prijmeni
+      );
+
+      if (data.length === 0) {
+        okno.document.getElementById("statistiky").innerHTML = "<p>Statistiky nenalezeny.</p>";
+        return;
+      }
+
+      const hlavicky = [
+        "Zápasy", "PPP", "Body", "Góly", "Asistence",
+        "Ø TOI", "+/-", "TM", "HITY", "BLOKY", "ÚSP. Vhazování"
+      ];
+
+      const radky = data.map(r =>
+        "<tr>" + hlavicky.map(k => `<td>${r[k] || "-"}</td>`).join("") + "</tr>"
+      ).join("");
+
+      const tabulka = `
+        <table>
+          <thead><tr>${hlavicky.map(k => `<th>${k}</th>`).join("")}</tr></thead>
+          <tbody>${radky}</tbody>
+        </table>
+      `;
+      okno.document.getElementById("statistiky").innerHTML = tabulka;
+    }
+  });
+}
+
 
 
 
