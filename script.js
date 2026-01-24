@@ -772,3 +772,186 @@ function zobrazDetailHrace(h) {
 naplnitFiltry();
 zobrazHrace(hraciData);
 nactiData();
+/* ===============================
+   PŘESTUPY
+================================ */
+
+// klik v menu na "Přestupy"
+document.addEventListener("DOMContentLoaded", () => {
+  const odkazPrestupy = document.getElementById("odkazPrestupy");
+  if (odkazPrestupy) {
+    odkazPrestupy.addEventListener("click", (e) => {
+      e.preventDefault();
+      zobrazPrestupy();
+    });
+  }
+});
+
+function zobrazPrestupy() {
+  const csvUrl = "https://raw.githubusercontent.com/Adamos1511/ELH-web/main/prestupy.csv";
+
+  Papa.parse(csvUrl, {
+    
+    download: true,
+    header: true,
+    delimiter: ";",
+    complete: function (results) {
+      const data = results.data.filter(r => r["JMÉNO"]);
+      const elhTymy = [
+  "HC Dynamo Pardubice",
+  "HC Sparta Praha",
+  "HC Oceláři Třinec",
+  "HC Kometa Brno",
+  "HC Škoda Plzeň",
+  "Mountfield HK",
+  "HC Vítkovice Ridera",
+  "HC Olomouc",
+  "BK Mladá Boleslav",
+  "HC Energie Karlovy Vary",
+  "Banes Motor České Budějovice",
+  "HC Verva Litvínov",
+  "Bílí Tygři Liberec",
+  "Rytíři Kladno"
+];
+      const sezony = [...new Set(data.map(r => r["SEZONA"]))].sort();
+      const odkud = [...new Set(data.map(r => r["ODKUD"]?.trim())
+    .filter(t => elhTymy.includes(t))
+)].sort();
+
+const kam = [...new Set(
+  data
+    .map(r => r["KAM"]?.trim())
+    .filter(t => elhTymy.includes(t))
+)].sort();
+
+
+
+      const okno = window.open("", "_blank");
+      okno.document.write(`
+        <html lang="cs">
+        <head>
+          <meta charset="UTF-8">
+          <title>Přestupy ELH</title>
+          <style>
+            body {
+              background: linear-gradient(to bottom, #001147, #002b80);
+              color: white;
+              font-family: 'Segoe UI', Tahoma, sans-serif;
+              padding: 40px;
+            }
+            h1 {
+              text-align: center;
+              margin-bottom: 30px;
+            }
+            .filtry {
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+              margin-bottom: 25px;
+              flex-wrap: wrap;
+            }
+            select {
+              padding: 8px 12px;
+              border-radius: 8px;
+              border: none;
+              font-size: 14px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              background: rgba(255,255,255,0.08);
+              border-radius: 12px;
+              overflow: hidden;
+            }
+            th, td {
+              padding: 10px 12px;
+              text-align: left;
+            }
+            th {
+              background: rgba(255,255,255,0.15);
+              text-transform: uppercase;
+              font-size: 13px;
+            }
+            tr:nth-child(even) {
+              background: rgba(255,255,255,0.05);
+            }
+          </style>
+        </head>
+        <body>
+
+        <h1>Přestupy ELH</h1>
+
+        <div class="filtry">
+          <select id="filtrSezona">
+            <option value="">Všechny sezony</option>
+            ${sezony.map(s => `<option value="${s}">${s}</option>`).join("")}
+          </select>
+
+          <select id="filtrOdkud">
+            <option value="">Odkud</option>
+            ${odkud.map(t => `<option value="${t}">${t}</option>`).join("")}
+          </select>
+
+          <select id="filtrKam">
+            <option value="">Kam</option>
+            ${kam.map(t => `<option value="${t}">${t}</option>`).join("")}
+          </select>
+        </div>
+
+        <div id="tabulka"></div>
+
+        <script>
+          const data = ${JSON.stringify(data)};
+
+          const filtrSezona = document.getElementById("filtrSezona");
+          const filtrOdkud = document.getElementById("filtrOdkud");
+          const filtrKam = document.getElementById("filtrKam");
+
+          function vykresli(radky) {
+            document.getElementById("tabulka").innerHTML = \`
+              <table>
+                <thead>
+                  <tr>
+                    <th>Jméno</th>
+                    <th>Příjmení</th>
+                    <th>Odkud</th>
+                    <th>Kam</th>
+                    <th>Pozice</th>
+                    <th>Sezona</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  \${radky.map(r => \`
+                    <tr>
+                      <td>\${r["JMÉNO"]}</td>
+                      <td>\${r["PŘÍJMENÍ"]}</td>
+                      <td>\${r["ODKUD"]}</td>
+                      <td>\${r["KAM"]}</td>
+                      <td>\${r["POZICE"]}</td>
+                      <td>\${r["SEZONA"]}</td>
+                    </tr>
+                  \`).join("")}
+                </tbody>
+              </table>
+            \`;
+          }
+
+          function filtruj() {
+            let f = data.filter(r =>
+              (!filtrSezona.value || r["SEZONA"] === filtrSezona.value) &&
+              (!filtrOdkud.value || r["ODKUD"] === filtrOdkud.value) &&
+              (!filtrKam.value || r["KAM"] === filtrKam.value)
+            );
+            vykresli(f);
+          }
+
+          filtrSezona.onchange = filtrOdkud.onchange = filtrKam.onchange = filtruj;
+          vykresli(data);
+        </script>
+
+        </body>
+        </html>
+      `);
+    }
+  });
+}
