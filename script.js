@@ -325,43 +325,6 @@ function zobrazDetail(jmeno, prijmeni, tym, pozice, vek, smlouva, drzeni, narodn
 }
 
 
-
-
-
-// --- FILTRY ---
-function naplnitFiltry() {
-  const tymy = [...new Set(hraciData.map(h => h.tym))].sort();
-  const pozice = [...new Set(hraciData.map(h => h.pozice))].sort();
-  const drzeni = [...new Set(hraciData.map(h => h.drzeni))].sort();
-  const narody = [...new Set(hraciData.map(h => h.narodnost))].sort();
-  const smlouvy = [...new Set(hraciData.map(h => h.smlouva))].sort();
-  
-
-  function naplnSelect(id, pole, popisek) {
-    const select = document.getElementById(id);
-    if (!select) return;
-    select.innerHTML = `<option value="">${popisek}</option>`;
-    pole.forEach(val => {
-      if (val) {
-        const option = document.createElement("option");
-        option.value = val;
-        option.textContent = val;
-        select.appendChild(option);
-      }
-    });
-    select.addEventListener("change", filtruj);
-  }
-
-  naplnSelect("filtrTymu", tymy, "Všechny týmy");
-  naplnSelect("filtrPozice", pozice, "Všechny pozice");
-  naplnSelect("filtrDrzeni", drzeni, "Všechna držení");
-  naplnSelect("filtrNarodnost", narody, "Všechny národnosti");
-  naplnSelect("filtrSmlouva", smlouvy, "Všechny smlouvy");
-
-  const vyhledavani = document.getElementById("vyhledavani");
-  if (vyhledavani) vyhledavani.addEventListener("input", filtruj);
-}
-
 /* --- FUNKCE PRO FILTROVÁNÍ --- */
 function naplnitFiltry() {
   const tymy = [...new Set(hraciData.map(h => h.tym))].sort();
@@ -569,38 +532,62 @@ function otevriKlub(zkratka) {
       </head>
 
       <body>
-        <div class="klub-detail">
-          <img src="https://raw.githubusercontent.com/Adamos1511/ELH-web/main/loga_tymu/${zkratka}.png" alt="${klub["NÁZEV TÝMU"]}">
-          <h1>${klub["NÁZEV TÝMU"]}</h1>
-        </div>
 
-        <div class="info-grid">
-          <p><b>Rok založení:</b> ${klub["ROK ZALOŽENÍ"] || "-"}</p>
-          <p><b>Počet titulů:</b> ${klub["POČET TITULŮ"] || "-"}</p>
-          <p><b>Hlavní trenér:</b> ${klub["HLAVNÍ TRENÉR"] || "-"}</p>
-          <p><b>Sezona kdy nastoupil:</b> ${klub["SEZONA KDY NASTOUPIL"] || "-"}</p>
-          <p><b>Dní jako hl. trenér:</b> ${klub["DNÍ JAKO HL.TRENÉR"] || "-"}</p>
-          <p><b>Poslední titul:</b> ${klub["POSLEDNÍ TITUL"] || "-"}</p>
-          <p><b>Průměrná návštěvnost:</b> ${klub["PRŮMĚRNÁ NÁVŠTĚVNOST"] || "-"}</p>
-          <p><b>Kapacita stadionu:</b> ${klub["KAPACITA"] || "-"}</p>
-          <p><b>% zaplněnost:</b> ${klub["% ZAPLNĚNOST"] || "-"}</p>
-          <p><b>Název stadionu:</b> ${klub["NÁZEV STADIONU"] || "-"}</p>
-        </div>
+  <!-- HLAVIČKA KLUBU -->
+  <div class="klub-detail">
+    <img src="https://raw.githubusercontent.com/Adamos1511/ELH-web/main/loga_tymu/${zkratka}.png" alt="${klub["NÁZEV TÝMU"]}">
+    <h1>${klub["NÁZEV TÝMU"]}</h1>
+  </div>
 
-        <h2>Výsledky umístění</h2>
-        <div class="info-grid">
-          <p><b>2024/25 ZČ:</b> ${klub["2024/25 ZČ"] || "-"}</p>
-          <p><b>2024/25 Playoff:</b> ${klub["2024/25 PLAYOFF"] || "-"}</p>
-          <p><b>2023/24 ZČ:</b> ${klub["2023/24 ZČ"] || "-"}</p>
-          <p><b>2023/24 Playoff:</b> ${klub["2023/24 PLAYOFF"] || "-"}</p>
-          <p><b>2022/23 ZČ:</b> ${klub["2022/23 ZČ"] || "-"}</p>
-          <p><b>2022/23 Playoff:</b> ${klub["2022/23 PLAYOFF"] || "-"}</p>
-          <p><b>2021/22 ZČ:</b> ${klub["2021/22 ZČ"] || "-"}</p>
-          <p><b>2021/22 Playoff:</b> ${klub["2021/22 PLAYOFF"] || "-"}</p>
-          <p><b>2020/21 ZČ:</b> ${klub["2020/21 ZČ"] || "-"}</p>
-          <p><b>2020/21 Playoff:</b> ${klub["2020/21 PLAYOFF"] || "-"}</p>
-        </div>
+  <!-- ZÁKLADNÍ INFO O KLUBU -->
+  <div class="info-grid">
+    <p><b>Rok založení:</b> ${klub["ROK ZALOŽENÍ"] || "-"}</p>
+    <p><b>Počet titulů:</b> ${klub["POČET TITULŮ"] || "-"}</p>
 
+    <p><b>Hlavní trenér:</b> ${klub["HLAVNÍ TRENÉR"] || "-"}</p>
+    <p><b>Sezona kdy nastoupil:</b> ${klub["SEZONA KDY NASTOUPIL"] || "-"}</p>
+
+    <p><b>Dní jako hl. trenér:</b> ${klub["DNÍ JAKO HL.TRENÉR"] || "-"}</p>
+    <p><b>Poslední titul:</b> ${klub["POSLEDNÍ TITUL"] || "-"}</p>
+
+    <p><b>Průměrná návštěvnost:</b> ${klub["PRŮMĚRNÁ NÁVŠTĚVNOST"] || "-"}</p>
+    <p><b>Kapacita stadionu:</b> ${klub["KAPACITA"] || "-"}</p>
+
+    <p><b>% zaplněnost:</b> ${klub["% ZAPLNĚNOST"] || "-"}</p>
+    <p><b>Název stadionu:</b> ${klub["NÁZEV STADIONU"] || "-"}</p>
+  </div>
+
+  <!-- 🆕 TÝMOVÉ PRŮMĚRY -->
+  <h2>Týmové průměry</h2>
+  <div class="info-grid">
+    <p><b>Průměrný věk:</b> ${klub["Průměrný věk"] || "-"} let</p>
+    <p><b>Průměrná výška:</b> ${klub["Průměrná výška"] || "-"} cm</p>
+
+    <p><b>Průměrná váha:</b> ${klub["Průměrná váha"] || "-"} kg</p>
+  </div>
+
+  <!-- VÝSLEDKY UMÍSTĚNÍ -->
+  <h2>Výsledky umístění</h2>
+  <div class="info-grid">
+    <p><b>2024/25 ZČ:</b> ${klub["2024/25 ZČ"] || "-"}</p>
+    <p><b>2024/25 Playoff:</b> ${klub["2024/25 PLAYOFF"] || "-"}</p>
+
+    <p><b>2023/24 ZČ:</b> ${klub["2023/24 ZČ"] || "-"}</p>
+    <p><b>2023/24 Playoff:</b> ${klub["2023/24 PLAYOFF"] || "-"}</p>
+
+    <p><b>2022/23 ZČ:</b> ${klub["2022/23 ZČ"] || "-"}</p>
+    <p><b>2022/23 Playoff:</b> ${klub["2022/23 PLAYOFF"] || "-"}</p>
+
+    <p><b>2021/22 ZČ:</b> ${klub["2021/22 ZČ"] || "-"}</p>
+    <p><b>2021/22 Playoff:</b> ${klub["2021/22 PLAYOFF"] || "-"}</p>
+
+    <p><b>2020/21 ZČ:</b> ${klub["2020/21 ZČ"] || "-"}</p>
+    <p><b>2020/21 Playoff:</b> ${klub["2020/21 PLAYOFF"] || "-"}</p>
+  </div>
+
+</body>
+
+      
         <h2>Soupiska týmu</h2>
         <div class="hraci-grid">
           ${hraciTymu.map(h => `
